@@ -18,18 +18,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate index.html
+      - name: Validate index.html and v2/index.html
         run: |
-          test -s index.html || { echo "index.html missing or empty"; exit 1; }
-          if grep -Eiq '<script[^>]+src=|<link[^>]+href=' index.html; then
-            echo "External script/link found; the no-CDN rule forbids this"
-            grep -Ein '<script[^>]+src=|<link[^>]+href=' index.html
-            exit 1
-          fi
+          for f in index.html v2/index.html; do
+            test -s "$f" || { echo "$f missing or empty"; exit 1; }
+            if grep -Eiq '<script[^>]+src=|<link[^>]+href=' "$f"; then
+              echo "External script/link found in $f; the no-CDN rule forbids this"
+              grep -Ein '<script[^>]+src=|<link[^>]+href=' "$f"
+              exit 1
+            fi
+          done
+          grep -q 'Content-Security-Policy' v2/index.html || { echo "v2 must keep its CSP meta tag"; exit 1; }
 
       - name: HTML check (non-blocking)
         continue-on-error: true
-        run: npx --yes html-validate index.html
+        run: npx --yes html-validate index.html v2/index.html
 
       - name: Secret scan
         uses: gitleaks/gitleaks-action@v2
@@ -54,8 +57,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Prepare site
         run: |
-          mkdir _site
+          mkdir -p _site/v2
           cp index.html _site/
+          cp v2/index.html _site/v2/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

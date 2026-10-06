@@ -28,3 +28,9 @@ All behaviour hangs off one `state` object (`tasks`, `filters`, `nextId`, plus U
 ## Testing note
 
 `FORMSUBMIT_ENDPOINT` ships with a placeholder address, so the notification call fails by design until it is swapped and activated (first submission triggers a confirmation email). Expect the "email notification failed" warning toast in local testing.
+
+## v2 (`v2/index.html`)
+
+A separate single-file redesign, deployed to `/v2/` by CI; the root `index.html` (v1) must stay untouched. Same constraints and architecture as above, except `renderBoard()` also calls `renderDashboard()` (KPI tiles, SVG timeline, donut and bars, all derived from the filtered tasks). v2 ships a CSP `<meta>` (CI fails if it is removed), so any new external origin must be added there deliberately. User text goes through `cleanText()` then `escapeHtml()`.
+
+Project skills in `.claude/skills/` (frontend-design, ui-ux-pro-max, cybersecurity-analyst) carry project-specific sections; use them for design and security reviews.

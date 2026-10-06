@@ -4,11 +4,22 @@ IT PMO Kanban board demo for a fictitious bank, built as a single vanilla HTML/C
 
 ![CI](https://github.com/patwik-gh/Claude_Demo/actions/workflows/ci.yml/badge.svg)
 
-**Live demo:** https://patwik-gh.github.io/Claude_Demo/
+**Live demo (v1):** https://patwik-gh.github.io/Claude_Demo/
+**Live demo (v2, dashboard redesign):** https://patwik-gh.github.io/Claude_Demo/v2/
 
 ![IT PMO Kanban board](docs/screenshot.png)
 
-## Features
+## v2: dashboard redesign
+
+`v2/index.html` is a redesign published next to v1 (v1 at the site root is unchanged). It keeps the same board behaviour and adds:
+
+- A simpler, Apple-style look: neutral greys and white, one blue accent, red only for overdue.
+- A dashboard above the board: KPI tiles, a due-date timeline (dots placed by due date and grouped by priority, with a "today" line and an overdue zone), a status donut, and bars for open work by deadline and by priority. Everything follows the filters, and the timeline has a "View as table" fallback.
+- Security hardening: Content Security Policy limiting connections to formsubmit.co, input sanitising (control and bidi characters stripped), strict allow-list validation, endpoint check before any request, no cookies or referrer, a honeypot field, a 5-per-minute submit limit and a 200-task cap.
+
+![IT PMO Kanban board v2](docs/screenshot-v2.png)
+
+## Features (v1)
 
 - Four columns: Backlog, In Progress, Blocked, Done.
 - Add tasks through a dialog; each task gets an ID with the `UOB-ITPM-####` prefix.
@@ -32,9 +43,10 @@ Open `index.html` in a browser. No build step and no server needed.
 ## Project structure
 
 ```
-index.html   Markup, styles and script (all inline)
+index.html   v1: markup, styles and script (all inline)
+v2/index.html   v2: dashboard redesign (all inline)
 CLAUDE.md    Guidance for Claude Code
-docs/screenshot.png   README screenshot (not part of the deployed site)
+docs/screenshot.png, docs/screenshot-v2.png   README screenshots (not part of the deployed site)
 .github/workflows/ci.yml   CI checks and GitHub Pages deployment
 ```
 
